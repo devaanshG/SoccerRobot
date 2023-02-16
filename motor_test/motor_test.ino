@@ -1,9 +1,10 @@
-#define EN1 3
-#define EN2 9
-#define EN3 11
-#define PH1 2
-#define PH2 8
-#define PH3 10
+#define EN1 5
+#define EN2 6
+#define EN3 3
+
+#define PH1 4
+#define PH2 7
+#define PH3 2
 
 void setup() {
   // put your setup code here, to run once:
@@ -45,6 +46,10 @@ void loop() {
     delay(10);
   }
   delay(500);
+
+
+
+
 }
 
 int speed1 = 0;

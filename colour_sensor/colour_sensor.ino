@@ -7,6 +7,7 @@ Adafruit_TCS34725 tcs = Adafruit_TCS34725(TCS34725_INTEGRATIONTIME_614MS, TCS347
 Adafruit_LIS3MDL compass;
 
 uint16_t r, g, b, c;
+int x, y;
 
 String colours[]                          = {"GOAL",    "LEFT",     "RIGHT",    "MIDDLE"};
 uint16_t lower_range[sizeof(colours)][3]  = {{0, 0, 0}, {0, 0, 0},  {0, 0, 0},  {0, 0, 0}};
@@ -66,4 +67,8 @@ int get_current_colour_ID(){
     }
   }
   return -1;
+}
+
+void update_position(){
+  
 }
