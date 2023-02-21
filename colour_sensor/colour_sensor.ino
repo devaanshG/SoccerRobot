@@ -68,7 +68,3 @@ int get_current_colour_ID(){
   }
   return -1;
 }
-
-void update_position(){
-  
-}
