@@ -1,0 +1,6 @@
+{
+    "board": "arduino:avr:uno",
+    "sketch": "colour_sensor.ino",
+    "port": "COM3",
+    "programmer": "buspirate"
+}
