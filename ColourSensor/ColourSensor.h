@@ -1,4 +1,5 @@
 #include "Adafruit_TCS34725.h"
+#include <Adafruit_Sensor.h>
 #include "Colour.h"
 #include "ColourRange.h"
 
@@ -8,13 +9,21 @@
 
 class ColourSensor{
     public:
-        static ColourRange ranges[17];
+        static ColourRange ranges[5];
 
+
+        //initailizes colour sensors
         static void init();
+        
         static int get_current_colour_ID();
-    private:
+        
+
+        static Colour col;
         static uint16_t r, g, b, c;
-        static Adafruit_TCS34725 tcs;
+    private:
+
+        
+        static Adafruit_TCS34725 sensor;
 
         static void update_colours();
 };

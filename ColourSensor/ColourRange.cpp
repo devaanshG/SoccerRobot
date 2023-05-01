@@ -1,5 +1,10 @@
 #include "ColourRange.h"
 
+ColourRange::ColourRange(){
+  lowerColour = Colour(0, 0, 0);
+  upperColour = Colour(0, 0, 0);
+}
+
 ColourRange::ColourRange(Colour lower, Colour upper){
     lowerColour = lower;
     upperColour = upper;
