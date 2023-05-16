@@ -3,7 +3,6 @@
 class Motors{
     public:
         static void init();
-
         static void MoveMotors(float theta, int speed, float angle);
 
     private:

@@ -1,5 +1,6 @@
 {
     "board": "arduino:avr:uno",
     "sketch": "motor_test.ino",
-    "port": "COM5"
+    "port": "COM3",
+    "programmer": "arduinoisp"
 }

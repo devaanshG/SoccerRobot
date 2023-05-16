@@ -9,14 +9,19 @@
 #define PH2 7
 #define PH3 2
 
-void Motors::MoveMotors(float theta, int magnitude, float rotation){
-  float angle1 = (30 + theta) * 0.01745;
-  float angle2 = (150 + theta) * 0.01745;
-  float angle3 = (90 + theta) * 0.01745;
+void Motors::MoveMotors(float theta, int speed, float angle){
+  if(speed < 0 || speed > 255){
+    Serial.println("Error: invalid MoveMotors speed input");
+    return;
+  }
+
+  float angle1 = (30 + theta) * PI/180;
+  float angle2 = (150 + theta) * PI/180;
+  float angle3 = (90 + theta) * PI/180;
     
-  float speed1 = cos(angle1) * magnitude + rotation;
-  float speed2 = cos(angle2) * magnitude + rotation;
-  float speed3 = cos(angle3) * magnitude + rotation;
+  float speed1 = cos(angle1) * speed + angle;
+  float speed2 = cos(angle2) * speed + angle;
+  float speed3 = cos(angle3) * speed + angle;
 
   MoveMotor(0, speed1);
   MoveMotor(1, speed2);

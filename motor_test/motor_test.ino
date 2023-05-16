@@ -6,10 +6,13 @@ void setup() {
   Motors::init();
 }
 
+unsigned short direction = 0;
+
 void loop() {
-  for (int i = 0; i<=255; i++){
-    Motors::MoveMotors(0, i, 0);
-    delay(10);
+  for (int direction = 0; direction<=360; direction++){
+
+    Motors::MoveMotors(0, 255, 100);
+    delay(100);
   }
   delay(500);
 }
