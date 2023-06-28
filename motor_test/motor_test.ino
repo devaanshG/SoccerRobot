@@ -9,10 +9,11 @@ void setup() {
 unsigned short direction = 0;
 
 void loop() {
-  for (int direction = 0; direction<=360; direction++){
+  for (int i = 0; i<=255; i++){
 
-    Motors::MoveMotors(0, 255, 100);
-    delay(100);
+    Motors::MoveMotors(0, i, 0);
+    Serial.println(i);
+    delay(10);
   }
   delay(500);
 }
