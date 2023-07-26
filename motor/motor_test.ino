@@ -10,7 +10,6 @@ unsigned short direction = 0;
 
 void loop() {
   for (int i = 0; i<=255; i++){
-
     Motors::MoveMotors(0, i, 0);
     Serial.println(i);
     delay(10);
