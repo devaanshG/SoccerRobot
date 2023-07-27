@@ -6,6 +6,12 @@
 bool GetParity(char* input);
 bool GetParity(char input);
 
+void FlushReadBuffer();
+
+void InitMaster();
+MasterToSlave1* InitSlave1();
+Slave2ToMaster* InitSlave2();
+
 struct Packet{
     public:
       virtual bool Verify();
