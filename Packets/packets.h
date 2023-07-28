@@ -18,6 +18,7 @@ typedef struct{
 } Packet;
 
 typedef struct: public Packet{
+  
   public:
     unsigned short moveSpeed; //the speed for the robot to move(0-255)
     float moveDirection; //the direction for the robot to move(0-360)
@@ -38,15 +39,10 @@ typedef struct: public Packet{
 	  float estimatedBallDirection;//the estimated direction of the ball based on the sensors(0-360)
 
     void Request();
-    void Respond();
+    void Respond(int count);
     char* Seal();
     bool Verify();
 } Slave2ToMaster;
 
-
-
-Tuple<MasterToSlave1 * ,Slave2ToMaster *> InitMaster();
-MasterToSlave1* InitSlave1();
-Slave2ToMaster* InitSlave2();
 
 #endif

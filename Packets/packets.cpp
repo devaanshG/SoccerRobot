@@ -1,32 +1,8 @@
 #include "packets.h"
 #include "Wire.h"
 
-const uint Slave1Address = 0x23;
-const uint Slave2Address = 0x24;
-
-Tuple<MasterToSlave1* ,Slave2ToMaster*> InitMaster(){
-  Wire.begin();
-  Wire.setClock(100'000);//100khz, using ' to make numbers look pretty is perfectly valid cpp
-
-  MasterToSlave1* pak1 = new MasterToSlave1();
-  Slave2ToMaster* pak2 = new Slave2ToMaster();
-
-  return new Tuple<MasterToSlave1*, Slave2ToMaster*>(
-    pak1, pak2
-  )
-}
-MasterToSlave1* InitSlave1(){
-  Wire.begin(Slave1Address);
-  MasterToSlave1* pak = new MasterToSlave1();
-  Wire.onRecieve(pak->Recieve);
-  return pak;
-}
-Slave2ToMaster* InitSlave2(){
-  Wire.begin(Slave2Address);
-  Slave2ToMaster* pak = new Slave2ToMaster();
-  Wire.onRequest(pak->Respond);
-  return pak;
-}
+#define Slave1Address 0x23
+#define Slave2Address 0x24
 
 bool GetParity(char* input){
   bool ret = false;
@@ -76,7 +52,7 @@ void MasterToSlave1::Send(){
   Wire.endTransmission();
 }
 
-void MasterToSlave1::Recieve(int count){
+void MasterToSlave1::Recieve(){
   char* buffer = new char[sizeof(MasterToSlave1)];
   size_t readBytes = Wire.readBytes(buffer, sizeof(MasterToSlave1));
   if(readBytes != sizeof(MasterToSlave1)){
