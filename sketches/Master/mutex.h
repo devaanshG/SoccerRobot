@@ -5,15 +5,18 @@ template<class T>
 
 ///an implementation of Mutex, NOTE that this WILL NOT
 ///work with multiple cores waiting on the same Mutex
-typedef struct Mutex{
-  
+struct Mutex{
   public:
-    T object;
+    volatile T object;
     Mutex(T obj){
       object = obj;
     }
 
     void GetLock(){
+      // return; ///UNCOMMENT to SHORT mutex, this could
+                ///cause corruption in data and false readings, 
+                ///but thats better than the robot freezing.
+
       while(locked);//block until unlocked
       locked = true;//lock again
       return;
@@ -25,7 +28,7 @@ typedef struct Mutex{
       return locked;
     }
   private:
-    bool locked;
+    volatile bool locked;
 
     
 };

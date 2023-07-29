@@ -1,6 +1,10 @@
+//TARGETING Raspberry Pi Pico (NO wifi/bluetooth)
+
 #include "C:\Users\wdlea\programming\Arduino\soccerBot\lib\Magnetometer\magnetometer.h"
+#include "C:\Users\wdlea\programming\Arduino\soccerBot\lib\ColourSensor\ColourSensor.h"
 #include "C:\Users\wdlea\programming\Arduino\soccerBot\lib\Packets\packets.h"
 #include "mutex.h"
+#include "Wire.h"
 
 //we will use both cores of the pico. 
 //Core 0 will:
@@ -15,7 +19,8 @@
 
 //SLAVE 1
 Mutex<MasterToSlave1*> ms1 = new Mutex(new MasterToSlave1);
-bool ms1NeedsSend = false;
+volatile bool ms1NeedsSend = false;
+
 
 void SetMotors(float direction, unsigned short speed = 0xff, float rotation = 0, bool dribblerCapturing=true){
   ms1->moveSpeed = speed;
@@ -29,25 +34,63 @@ void StopMotors(){
 
 //SLAVE 2
 Mutex<Slave2ToMaster*> s2m = new Mutex(new Slave2ToMaster);
-bool s2mNeedsSend = false;
+volatile bool s2mNeedsSend = false;
 
+//MAGNETOMETER
+Magnetometer mag = new Magnetometer();
+Mutex<float> heading = new Mutex<float>(0);
 
+//COLOUR SENSOR
+ColourSensor col = new ColourSensor();
+Mutex<int> colourID = new Mutex<int>(0);
 
 //CORE 0
 void SetupCore0(){
-  
+  Serial.begin(9600);
 }
 void DoGameLogic(){
+  Serial.print(F("\tCOLID:\t"));
+  colourID.GetLock();
+  Serial.print(colourID.object);
+  colourID.ReleaseLock();
 
+  Serial.print(F("\tHEADING:\t"));
+  heading.GetLock();
+  Serial.print(heading.object);
+  heading.ReleaseLock();
+
+  //S2M
+  s2m.GetLock();
+  Serial.print(F("\tESTIMATEDBALLDIRECTION:\t"));
+  Serial.print(s2m.object->estimatedBallDirection);
+
+  Serial.print(F("\tLEFTDISTANCE:\t"));
+  Serial.print(s2m.object->leftObsticalDistance);
+
+  Serial.print(F("\tRIGHTDISTANCE:\t"));
+  Serial.print(s2m.object->rightObsticalDistance);
+
+  s2m.ReleaseLock();
 }
 
 //CORE 1
 void SetupCore1(){
+  Wire.begin();
+  Wire.SetSDA(0);
+  Wire.SetSCL(1);
 
+  mag.Init();
+  col.init();
 }
 
-void CheckMagnetometer(){
-  
+void CheckI2CPeripherals(){
+  heading.GetLock();
+  heading.object = mag.GetHeading();
+  heading.ReleaseLock();
+
+  colourID.GetLock();
+  colourID.object = col.get_current_colour_ID();
+  colourID.ReleaseLock();
 }
 
 void DeliverPackets(){
@@ -81,6 +124,6 @@ void loop(){
   DoGameLogic();
 }
 void loop1(){
-  CheckMagnetometer();
+  CheckI2CPeripherals();
   DeliverPackets();
 }
