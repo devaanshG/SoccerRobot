@@ -60,7 +60,6 @@ void MasterToSlave1::Recieve(){
   }else{
     *this = *reinterpret_cast<MasterToSlave1*>(buffer);
   }
-  
 }
 
 bool Slave2ToMaster::Verify(){
