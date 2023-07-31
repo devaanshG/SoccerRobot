@@ -2,9 +2,9 @@
 
 #include "mutex.h"
 #include "Wire.h"
-#include "C:/Users/wdlea/programming/Arduino/soccerBot/lib/Magnetometer/magnetometer.h"
-#include "C:/Users/wdlea/programming/Arduino/soccerBot/lib/ColourSensor/ColourSensor.h"
-#include "C:/Users/wdlea/programming/Arduino/soccerBot/lib/Packets/packets.h"
+#include "src/Magnetometer/magnetometer.h"
+#include "src/ColourSensor/ColourSensor.h"
+#include "src/Packets/packets.h"
 
 //i will use both cores of the pico. 
 //Core 0 will:
