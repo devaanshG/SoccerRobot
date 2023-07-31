@@ -1,12 +1,12 @@
 //TARGETING Raspberry Pi Pico (NO wifi/bluetooth)
 
-#include "C:\Users\wdlea\programming\Arduino\soccerBot\lib\Magnetometer\magnetometer.h"
-#include "C:\Users\wdlea\programming\Arduino\soccerBot\lib\ColourSensor\ColourSensor.h"
-#include "C:\Users\wdlea\programming\Arduino\soccerBot\lib\Packets\packets.h"
 #include "mutex.h"
 #include "Wire.h"
+#include "C:/Users/wdlea/programming/Arduino/soccerBot/lib/Magnetometer/magnetometer.h"
+#include "C:/Users/wdlea/programming/Arduino/soccerBot/lib/ColourSensor/ColourSensor.h"
+#include "C:/Users/wdlea/programming/Arduino/soccerBot/lib/Packets/packets.h"
 
-//we will use both cores of the pico. 
+//i will use both cores of the pico. 
 //Core 0 will:
 //Handle the peripherals and the other boards making it the only core
 //using i2c which is probably good, becuase making our 
@@ -18,31 +18,32 @@
 
 
 //SLAVE 1
-Mutex<MasterToSlave1*> ms1 = new Mutex(new MasterToSlave1);
+Mutex<MasterToSlave1*> ms1 = *new Mutex(new MasterToSlave1);
 volatile bool ms1NeedsSend = false;
 
 
 void SetMotors(float direction, unsigned short speed = 0xff, float rotation = 0, bool dribblerCapturing=true){
-  ms1->moveSpeed = speed;
-  ms1->moveRotation = rotation;
-  ms1->moveDirection = direction;
-  ms1->moveSpeed = speed;
+  ms1.object->moveSpeed = speed;
+  ms1.object->moveRotation = rotation;
+  ms1.object->moveDirection = direction;
+  ms1.object->moveSpeed = speed;
 }
+
 void StopMotors(){
   SetMotors(0, 0);
 }
 
 //SLAVE 2
-Mutex<Slave2ToMaster*> s2m = new Mutex(new Slave2ToMaster);
+Mutex<Slave2ToMaster*> s2m = *new Mutex(new Slave2ToMaster);
 volatile bool s2mNeedsSend = false;
 
 //MAGNETOMETER
-Magnetometer mag = new Magnetometer();
-Mutex<float> heading = new Mutex<float>(0);
+Magnetometer mag = *new Magnetometer();
+Mutex<float> heading = *new Mutex<float>(0);
 
 //COLOUR SENSOR
-ColourSensor col = new ColourSensor();
-Mutex<int> colourID = new Mutex<int>(0);
+ColourSensor col = *new ColourSensor();
+Mutex<int> colourID = *new Mutex<int>(0);
 
 //CORE 0
 void SetupCore0(){
@@ -76,8 +77,8 @@ void DoGameLogic(){
 //CORE 1
 void SetupCore1(){
   Wire.begin();
-  Wire.SetSDA(0);
-  Wire.SetSCL(1);
+  Wire.setSDA(0);
+  Wire.setSCL(1);
 
   mag.Init();
   col.init();
