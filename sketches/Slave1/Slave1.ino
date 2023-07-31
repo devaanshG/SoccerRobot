@@ -1,5 +1,5 @@
-#include "C:/Users/wdlea/programming/Arduino/soccerBot/lib/Packets/packets.h"
-#include "C:/Users/wdlea/programming/Arduino/soccerBot/lib/motor/Motors.h"
+#include "./src/Packets/packets.h"
+#include "./src/motor/Motors.h"
 #include "Wire.h"
 
 MasterToSlave1 MS1 = *new MasterToSlave1();
@@ -19,6 +19,8 @@ void setup(){
   pinMode(DRIBBLER_EN, OUTPUT);
   pinMode(DRIBBLER_PH, OUTPUT);
 }
+
+void loop(){}
 
 void onRecv(int count){
   MS1.Recieve();

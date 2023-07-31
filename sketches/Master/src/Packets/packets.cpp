@@ -95,3 +95,5 @@ void Slave2ToMaster::Request(){
 void Slave2ToMaster::Respond(int count){
   Wire.write(this->Seal(), sizeof(MasterToSlave1));
 }
+
+

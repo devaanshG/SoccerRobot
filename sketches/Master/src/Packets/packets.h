@@ -11,16 +11,15 @@ bool GetParity(char input);
 
 void FlushReadBuffer();
 
-
-typedef struct{
+typedef struct Packet {
     public:
-      virtual bool Verify();
-      virtual char* Seal();
+      virtual bool Verify() = 0;
+      virtual char* Seal() = 0;
     protected:
      char parity;
 } Packet;
 
-typedef struct: public Packet{
+typedef struct MasterToSlave1: public Packet{
   
   public:
     unsigned short moveSpeed; //the speed for the robot to move(0-255)
@@ -32,20 +31,21 @@ typedef struct: public Packet{
 
     void Send();
     void Recieve();
-    char* Seal();
     bool Verify();
+    char* Seal();
 } MasterToSlave1;
 
-typedef struct: public Packet{
+typedef struct Slave2ToMaster: public Packet{
   public:
     float leftObsticalDistance;//the distance to the obstical(wall/opponent) left of the robot, negative distance means that no obstical detected
-	  float rightObsticalDistance;//the distance to the obstical(wall/opponent) right of the robot, negative distance means that no obstical detected
-	  float estimatedBallDirection;//the estimated direction of the ball based on the sensors(0-360)
+	float rightObsticalDistance;//the distance to the obstical(wall/opponent) right of the robot, negative distance means that no obstical detected
+	int estimatedBallDirection;//the estimated direction of the ball based on the sensors(0-360)
+    //float estimatedBallHeading;//the "gradient" of the balls movement
 
     void Request();
     void Respond(int count);
-    char* Seal();
     bool Verify();
+    char* Seal();
 } Slave2ToMaster;
 
 

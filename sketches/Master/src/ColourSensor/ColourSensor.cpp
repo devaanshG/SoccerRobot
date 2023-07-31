@@ -10,9 +10,16 @@ uint16_t ColourSensor::g = 0;
 uint16_t ColourSensor::b = 0;
 uint16_t ColourSensor::c = 0;
 Colour ColourSensor::col = Colour();
-ColourRange ColourSensor::ranges[5] = *new ColourRange[5];
 
-Adafruit_TCS34725 ColourSensor::sensor = new Adafruit_TCS34725(TCS34725_INTEGRATIONTIME_614MS, TCS34725_GAIN_1X);
+Colour ColourSensor::colours[5] = {
+    *new Colour(0, 0, 0),
+    *new Colour(0, 0, 0),
+    *new Colour(0, 0, 0),
+    *new Colour(0, 0, 0),
+    *new Colour(0, 0, 0)
+};
+
+Adafruit_TCS34725 ColourSensor::sensor = *new Adafruit_TCS34725(TCS34725_INTEGRATIONTIME_614MS, TCS34725_GAIN_1X);
 
 void ColourSensor::init(){
 
@@ -34,11 +41,16 @@ int ColourSensor::get_current_colour_ID(){
     col = Colour(ColourSensor::r/512, ColourSensor::g/512, ColourSensor::b/512);//get RGB
     Serial.println(col.ToString());
 
-    for(int i = 0; i < (sizeof(ranges)/sizeof(ranges[0])); i++){
-        if(ranges[i].colourInRange(col)){
-            return i;
+    int minDist = 0xFFFFFFFF;
+    int closestCol = -1;
+    for(int i = 0; i < 5; i++){
+        int dist = col.DistanceFrom(colours[i]);
+        if(dist < minDist){
+            closestCol = i;
+            minDist = dist;
         }
     }
 
-    return -1;
+    const int ColourMaximumDistance = 0xFFFFFFF;//big number, this is just here in case we need to do something to do with filtering out other colours later
+    return (minDist < ColourMaximumDistance ? closestCol : -1);
 }

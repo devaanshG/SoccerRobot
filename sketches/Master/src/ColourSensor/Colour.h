@@ -10,6 +10,7 @@ struct Colour
         Colour();
         uint16_t r, g, b;
         String ToString();
+        int DistanceFrom(Colour other);
 };
 
 #endif
