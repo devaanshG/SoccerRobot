@@ -2,9 +2,12 @@
 
 #include "mutex.h"
 #include "Wire.h"
-#include "C:/Users/wdlea/programming/Arduino/soccerBot/lib/Magnetometer/magnetometer.h"
-#include "C:/Users/wdlea/programming/Arduino/soccerBot/lib/ColourSensor/ColourSensor.h"
-#include "C:/Users/wdlea/programming/Arduino/soccerBot/lib/Packets/packets.h"
+#include "src/Magnetometer/magnetometer.h"
+#include "src/ColourSensor/ColourSensor.h"
+#include "src/Packets/packets.h"
+
+#define CALIBRATE_BUTTON_PIN 7//both must support ISR(i think all rpi pins support)
+#define PLAY_BUTTON_PIN 8
 
 //i will use both cores of the pico. 
 //Core 0 will:
@@ -22,15 +25,18 @@ Mutex<MasterToSlave1*> ms1 = *new Mutex(new MasterToSlave1);
 volatile bool ms1NeedsSend = false;
 
 
-void SetMotors(float direction, unsigned short speed = 0xff, float rotation = 0, bool dribblerCapturing=true){
+void SetMotors(float direction, unsigned short speed = 0xff, float rotation = 0, bool dribblerCapturing=true, bool dribblerOn = true){
+  ms1.GetLock();
   ms1.object->moveSpeed = speed;
   ms1.object->moveRotation = rotation;
   ms1.object->moveDirection = direction;
   ms1.object->moveSpeed = speed;
+  ms1.object->dribblerOn = dribblerOn;
+  ms1.ReleaseLock();
 }
 
 void StopMotors(){
-  SetMotors(0, 0);
+  SetMotors(0, 0, 0, true, false);
 }
 
 //SLAVE 2
@@ -45,10 +51,32 @@ Mutex<float> heading = *new Mutex<float>(0);
 ColourSensor col = *new ColourSensor();
 Mutex<int> colourID = *new Mutex<int>(0);
 
+//STATE
+bool isPlaying = false;
+float attackHeading = 0;
+
+//HELPERS
+bool IsGoingAttackDirection(){
+  return heading.object > (attackHeading - 90)%360 && heading.object < (attackHeading + 90)%360;//not very good but an atomic operation so it will be fine
+}
+
+//INTERRUPTS
+void OnCalibrateRise(){
+  heading.GetLock();
+  attackHeading = heading.object;
+  heading.ReleaseLock();
+}
+
+void OnPlayRise(){
+  isPlaying = !isPlaying;
+}
+
 //CORE 0
 void SetupCore0(){
   Serial.begin(9600);
+  
 }
+
 void DoGameLogic(){
   Serial.print(F("\tCOLID:\t"));
   colourID.GetLock();
@@ -74,6 +102,7 @@ void DoGameLogic(){
   s2m.ReleaseLock();
 }
 
+
 //CORE 1
 void SetupCore1(){
   Wire.begin();
@@ -82,6 +111,12 @@ void SetupCore1(){
 
   mag.Init();
   col.init();
+
+  pinMode(PLAY_BUTTON_PIN, INPUT_PULLDOWN);
+  pinMode(CALIBRATE_BUTTON_PIN, INPUT_PULLDOWN);
+
+  attachInterrupt(digitalPinToInterrupt(PLAY_BUTTON_PIN), OnPlayRise, RISING);
+  attachInterrupt(digitalPinToInterrupt(CALIBRATE_BUTTON_PIN), OnCalibrateRise, RISING);
 }
 
 void CheckI2CPeripherals(){
@@ -122,7 +157,10 @@ void setup1(){
 }
 
 void loop(){
-  DoGameLogic();
+  if(isPlaying)
+    DoGameLogic();
+  else
+    StopMotors();
 }
 void loop1(){
   CheckI2CPeripherals();
