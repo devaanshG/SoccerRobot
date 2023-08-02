@@ -12,11 +12,11 @@ uint16_t ColourSensor::c = 0;
 Colour ColourSensor::col = Colour();
 
 Colour ColourSensor::colours[5] = {
-    *new Colour(0, 0, 0),
-    *new Colour(0, 0, 0),
-    *new Colour(0, 0, 0),
-    *new Colour(0, 0, 0),
-    *new Colour(0, 0, 0)
+    *new Colour(5029, 7977, 9186),//outside
+    *new Colour(457, 590, 697),//goal black
+    *new Colour(2229, 3391, 2339),//green 1
+    *new Colour(1744, 3350, 2660),//green 2
+    *new Colour(546, 919, 1027)//midfield
 };
 
 Adafruit_TCS34725 ColourSensor::sensor = *new Adafruit_TCS34725(TCS34725_INTEGRATIONTIME_614MS, TCS34725_GAIN_1X);
@@ -38,7 +38,7 @@ void ColourSensor::update_colours(){
 
 int ColourSensor::get_current_colour_ID(){
     update_colours();
-    col = Colour(ColourSensor::r/512, ColourSensor::g/512, ColourSensor::b/512);//get RGB
+    col = Colour(ColourSensor::r, ColourSensor::g, ColourSensor::b);//get RGB
     Serial.println(col.ToString());
 
     int minDist = 0xFFFFFFFF;

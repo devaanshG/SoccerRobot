@@ -9,6 +9,8 @@
 #define CALIBRATE_BUTTON_PIN 7//both must support ISR(i think all rpi pins support)
 #define PLAY_BUTTON_PIN 8
 
+#define BUTTON_DEBOUNCE_DURATION 100//ms
+
 //i will use both cores of the pico. 
 //Core 0 will:
 //Handle the peripherals and the other boards making it the only core
@@ -45,7 +47,7 @@ volatile bool s2mNeedsSend = false;
 
 //MAGNETOMETER
 Magnetometer mag = *new Magnetometer();
-Mutex<float> heading = *new Mutex<float>(0);
+Mutex<int> heading = *new Mutex<int>(0);
 
 //COLOUR SENSOR
 ColourSensor col = *new ColourSensor();
@@ -53,7 +55,7 @@ Mutex<int> colourID = *new Mutex<int>(0);
 
 //STATE
 bool isPlaying = false;
-float attackHeading = 0;
+int attackHeading = 0;
 
 //HELPERS
 bool IsGoingAttackDirection(){
@@ -62,13 +64,23 @@ bool IsGoingAttackDirection(){
 
 //INTERRUPTS
 void OnCalibrateRise(){
-  heading.GetLock();
-  attackHeading = heading.object;
-  heading.ReleaseLock();
+  static int lastPress;
+  int currentTime = millis();
+  if(currentTime - lastPress > BUTTON_DEBOUNCE_DURATION){
+    heading.GetLock();
+    attackHeading = heading.object;
+    heading.ReleaseLock();
+  }
+  lastPress = currentTime;
 }
 
 void OnPlayRise(){
-  isPlaying = !isPlaying;
+  static int lastPress;
+  int currentTime = millis();
+  if(currentTime - lastPress > BUTTON_DEBOUNCE_DURATION){
+    isPlaying = !isPlaying;
+  }
+  lastPress = currentTime;
 }
 
 //CORE 0
