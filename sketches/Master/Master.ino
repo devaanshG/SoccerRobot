@@ -6,7 +6,7 @@
 #include "src/ColourSensor/ColourSensor.h"
 #include "src/Packets/packets.h"
 
-#define CALIBRATE_BUTTON_PIN 7//both must support ISR(i think all rpi pins support)
+#define CALIBRATE_BUTTON_PIN 7 //both must support ISR(i think all rpi pins support)
 #define PLAY_BUTTON_PIN 8
 
 #define BUTTON_DEBOUNCE_DURATION 100//ms
@@ -16,6 +16,7 @@
 //Handle the peripherals and the other boards making it the only core
 //using i2c which is probably good, becuase making our 
 //own implementation of the protocol would be sub-optimal at best. 
+
 //Core 1 will:
 //Handle the game logic and any serial communication i may want to 
 //implement, such as logging or a "CLI" for communication with the 
@@ -23,7 +24,7 @@
 
 
 //SLAVE 1
-Mutex<MasterToSlave1*> ms1 = *new Mutex(new MasterToSlave1);
+Mutex<MasterToSlave1> ms1 = *new Mutex(new MasterToSlave1);
 volatile bool ms1NeedsSend = false;
 
 
@@ -42,7 +43,7 @@ void StopMotors(){
 }
 
 //SLAVE 2
-Mutex<Slave2ToMaster*> s2m = *new Mutex(new Slave2ToMaster);
+Mutex<Slave2ToMaster> s2m = *new Mutex(new Slave2ToMaster);
 volatile bool s2mNeedsSend = false;
 
 //MAGNETOMETER

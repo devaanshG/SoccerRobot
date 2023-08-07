@@ -5,6 +5,9 @@
 #define IR3 A2
 #define IR4 A3
 
+#define DRIBBLER_EN 11
+#define DRIBBLER_PH 12
+
 #define BALL 13
 
 int ballDir = 0;
@@ -25,8 +28,12 @@ void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);
   pinMode(BALL, INPUT);
+  pinMode(DRIBBLER_EN, OUTPUT);
+  pinMode(DRIBBLER_PH, OUTPUT);
   Motors::init();
   DeltaTime();
+  analogWrite(DRIBBLER_EN, 200);
+  digitalWrite(DRIBBLER_PH, HIGH);
 }
 
 void loop() {
@@ -48,7 +55,7 @@ void loop() {
 
     Serial.println(ballDir);
 
-    Motors::MoveMotors(ballDir, 255, 0);
+    Motors::MoveMotors(ballDir, 150, 0);
   }
 
   prevDir = ballDir;
