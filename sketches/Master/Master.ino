@@ -86,7 +86,6 @@ void OnPlayRise(){
 //CORE 0
 void SetupCore0(){
   Serial.begin(9600);
-  
 }
 
 void DoGameLogic(){

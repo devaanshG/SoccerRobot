@@ -18,7 +18,7 @@ void setup(){
 Slave2ToMaster pak = *new Slave2ToMaster();
 
 void loop(){
-  pak.estimatedBallDirection = getBallDir();
+  pak.estimatedBallDirection = 69;//getBallDir();
   DoPings();//two cores would be nice becuase pings take ages and i dont want to create my own library using ISRs
 }
 
