@@ -149,14 +149,14 @@ void DeliverPackets(){
 
     ms1.ReleaseLock();
   }
-  if(s2mNeedsSend){
-    s2m.GetLock();
+  
+  s2m.GetLock();
 
-    //request s2m
-    s2m.object->Request();
+  //request s2m
+  s2m.object->Request();
 
-    s2m.ReleaseLock();
-  }
+  s2m.ReleaseLock();
+  
 }
 
 //arduino framework functions

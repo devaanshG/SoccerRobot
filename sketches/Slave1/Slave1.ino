@@ -4,8 +4,8 @@
 
 MasterToSlave1 MS1 = *new MasterToSlave1();
 
-#define DRIBBLER_EN 1
-#define DRIBBLER_PH 2
+#define DRIBBLER_EN 11
+#define DRIBBLER_PH 12
 
 #define DRIBBLER_IDLE_EN 0
 #define DRIBBLER_ACTIVE_EN 255
@@ -30,5 +30,5 @@ void onRecv(int count){
 
 void SetDribbler(bool on, bool capturing){
   analogWrite(DRIBBLER_EN, on ? DRIBBLER_ACTIVE_EN : DRIBBLER_IDLE_EN);
-  analogWrite(DRIBBLER_PH, (int)capturing);
+  digitalWrite(DRIBBLER_PH, (int)capturing);
 }
