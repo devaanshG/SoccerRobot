@@ -1,4 +1,4 @@
-#include "src/motors.h"
+#include <Arduino.h>
 
 #define IR1 A0
 #define IR2 A1
@@ -21,19 +21,14 @@ float DeltaTime(){
   return delta;
 }
 
-void setup() {
-  // put your setup code here, to run once:
-  Serial.begin(9600);
-  pinMode(BALL, INPUT);
-  Motors::init();
-  DeltaTime();
+void Init() {
+
 }
 
-void loop() {
+int getBallDir() {
   // put your main code here, to run repeatedly:
   if (map(analogRead(IR1), 1023, 300, 0, 100) == 0 && map(analogRead(IR2), 1023, 300, 0, 100) == 0 && map(analogRead(IR3), 1023, 300, 0, 100) == 0 && map(analogRead(IR4), 1023, 300, 0, 100) == 0) {
     Serial.println("BALL NOT FOUND");
-    Motors::MoveMotors(0, 0, 0);
   } else {
     int sensor1Reading = map(analogRead(IR1), 1023, 300, 0, 100);
     int sensor2Reading = map(analogRead(IR2), 1023, 300, 0, 100);
@@ -48,8 +43,6 @@ void loop() {
 
     Serial.println(ballDir);
 
-    Motors::MoveMotors(ballDir, 255, 0);
   }
-
-  prevDir = ballDir;
+    return ballDir;
 }
