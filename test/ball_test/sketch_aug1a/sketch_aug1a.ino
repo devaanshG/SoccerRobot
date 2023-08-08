@@ -10,6 +10,8 @@
 
 #define BALL 13
 
+
+int velWeight = 2.4;
 int ballDir = 0;
 int ballDelta;
 int ballVel;
@@ -55,7 +57,9 @@ void loop() {
 
     Serial.println(ballDir);
 
-    Motors::MoveMotors(ballDir, 150, 0);
+    int motorsDir = ballDir + ballVel * velWeight;
+
+    Motors::MoveMotors(motorsDir, 250, ballVel);
   }
 
   prevDir = ballDir;
