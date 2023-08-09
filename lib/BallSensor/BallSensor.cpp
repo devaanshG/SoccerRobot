@@ -7,6 +7,8 @@
 
 #define BALL 13
 
+const int NULL_VAL 1000;
+
 int velWeight = 2.4;
 int ballDir = 0;
 int ballDelta;
@@ -30,6 +32,7 @@ int getBallDir() {
   // put your main code here, to run repeatedly:
   if (map(analogRead(IR1), 1023, 300, 0, 100) == 0 && map(analogRead(IR2), 1023, 300, 0, 100) == 0 && map(analogRead(IR3), 1023, 300, 0, 100) == 0 && map(analogRead(IR4), 1023, 300, 0, 100) == 0) {
     Serial.println("BALL NOT FOUND");
+    return NULL_VAL;
   } else {
     int sensor1Reading = map(analogRead(IR1), 1023, 300, 0, 100);
     int sensor2Reading = map(analogRead(IR2), 1023, 300, 0, 100);
@@ -43,8 +46,6 @@ int getBallDir() {
     ballVel = ballDelta - DeltaTime();
 
     int motorsDir = ballDir + ballVel * velWeight;
-
-    Serial.println(ballDir);
 
   }
     return motorsDir;
