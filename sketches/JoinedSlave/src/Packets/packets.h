@@ -3,8 +3,7 @@
 
 #include "tuple/tuple.h"
 
-const int Slave2Address = 0x24;
-const int Slave1Address = 0x23;
+const int SlaveAddress = 0x23;
 
 bool GetParity(char* input);
 bool GetParity(char input);
