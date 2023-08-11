@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include "BallSensor.h"
 
 #define IR1 A0
 #define IR2 A1
@@ -30,6 +31,7 @@ int getBallDir() {
   // put your main code here, to run repeatedly:
   if (map(analogRead(IR1), 1023, 300, 0, 100) == 0 && map(analogRead(IR2), 1023, 300, 0, 100) == 0 && map(analogRead(IR3), 1023, 300, 0, 100) == 0 && map(analogRead(IR4), 1023, 300, 0, 100) == 0) {
     Serial.println("BALL NOT FOUND");
+    return NULL_VALUE;
   } else {
     int sensor1Reading = map(analogRead(IR1), 1023, 300, 0, 100);
     int sensor2Reading = map(analogRead(IR2), 1023, 300, 0, 100);
@@ -43,9 +45,6 @@ int getBallDir() {
     ballVel = ballDelta - DeltaTime();
 
     int motorsDir = ballDir + ballVel * velWeight;
-
-    Serial.println(ballDir);
-
-  }
     return motorsDir;
+  }   
 }

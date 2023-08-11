@@ -117,9 +117,9 @@ void DoGameLogic(){
 
 //CORE 1
 void SetupCore1(){
-  Wire.begin();
   Wire.setSDA(0);
   Wire.setSCL(1);
+  Wire.begin();
 
   mag.Init();
   col.init();
