@@ -24,7 +24,7 @@
 
 
 //SLAVE 1
-Mutex<MasterToSlave1> ms1 = *new Mutex(new MasterToSlave1);
+Mutex<MasterToSlave1*> ms1 = *new Mutex(new MasterToSlave1);
 volatile bool ms1NeedsSend = false;
 
 
@@ -43,7 +43,7 @@ void StopMotors(){
 }
 
 //SLAVE 2
-Mutex<Slave2ToMaster> s2m = *new Mutex(new Slave2ToMaster);
+Mutex<Slave2ToMaster*> s2m = *new Mutex(new Slave2ToMaster);
 volatile bool s2mNeedsSend = false;
 
 //MAGNETOMETER

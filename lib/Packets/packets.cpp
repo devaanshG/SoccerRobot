@@ -44,7 +44,7 @@ char* MasterToSlave1::Seal(){
 }
 
 void MasterToSlave1::Send(){
-  Wire.beginTransmission(Slave1Address);
+  Wire.beginTransmission(SlaveAddress);
   Wire.write(this->Seal(), sizeof(MasterToSlave1));
   Wire.endTransmission();
 }
@@ -79,7 +79,7 @@ char* Slave2ToMaster::Seal(){
 
 void Slave2ToMaster::Request(){
   FlushReadBuffer();
-  Wire.requestFrom(Slave2Address, sizeof(Slave2ToMaster));
+  Wire.requestFrom(SlaveAddress, sizeof(Slave2ToMaster));
 
   if(sizeof(Slave2ToMaster) <= Wire.available()){
     char* buffer = new char[sizeof(Slave2ToMaster)];

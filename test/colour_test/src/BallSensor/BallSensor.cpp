@@ -7,6 +7,7 @@
 
 #define BALL 13
 
+int velWeight = 2.4;
 int ballDir = 0;
 int ballDelta;
 int ballVel;
@@ -41,8 +42,10 @@ int getBallDir() {
     ballDelta = ballDir - prevDir; // Find
     ballVel = ballDelta - DeltaTime();
 
+    int motorsDir = ballDir + ballVel * velWeight;
+
     Serial.println(ballDir);
 
   }
-    return ballDir;
+    return motorsDir;
 }
