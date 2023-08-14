@@ -41,7 +41,7 @@ int ColourSensor::get_current_colour_ID(){
     col = Colour(ColourSensor::r, ColourSensor::g, ColourSensor::b);//get RGB
     Serial.println(col.ToString());
 
-    long int minDist = 0xFFFFFFFF;
+    int minDist = 0xFFFFFFFF;
     int closestCol = -1;
     for(int i = 0; i < 5; i++){
         int dist = col.DistanceFrom(colours[i]);

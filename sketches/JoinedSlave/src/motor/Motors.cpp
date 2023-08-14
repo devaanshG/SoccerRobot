@@ -1,5 +1,6 @@
 #include "Motors.h"
 #include "Arduino.h"
+#include "Math.h"
 
 #define EN1 5
 #define EN2 6
@@ -22,6 +23,18 @@ void Motors::MoveMotors(float theta, int speed, float angle){
   float speed1 = cos(angle1) * speed + angle;
   float speed2 = cos(angle2) * speed + angle;
   float speed3 = cos(angle3) * speed + angle;
+
+
+  //find maximum and divide them by it, makes at least one value 1 and all others proportional
+  float max = max(max(speed1, speed2), speed3);
+  speed1 /= max;
+  speed2 /= max;
+  speed3 /= max;
+
+  //multiply all values by desired speed
+  speed1 *= min(255, speed);
+  speed2 *= min(255, speed);
+  speed3 *= min(255, speed);
 
   MoveMotor(0, speed1);
   MoveMotor(1, speed2);

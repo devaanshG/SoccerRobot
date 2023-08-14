@@ -1,11 +1,6 @@
 #include "magnetometer.h"
 
-//debugging purpouses
-#include <WiFi.h>
-
 void setup(){
-  Wire.setSDA(0);
-  Wire.setSCL(1);
   
   Serial.begin(9600);
   if(!Magnetometer::Init()){
@@ -14,6 +9,6 @@ void setup(){
   }
 }
 void loop(){
-  Serial.println(Magnetometer::GetHeading());
+  Serial.print(Magnetometer::GetHeading());
   delay(100);
 }

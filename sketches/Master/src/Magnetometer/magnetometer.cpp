@@ -2,7 +2,7 @@
 #include <math.h>
 Adafruit_LIS3MDL* Magnetometer::compass = new Adafruit_LIS3MDL();
 
-const float HARD_IRON[3] = {239, -105, -21};//CONSIDER that these are placeholder values
+const float HARD_IRON[3] = {-16.72, -7.68, -50.15};//CONSIDER that these are placeholder values
 
 float Magnetometer::GetHeading(){
     sensors_event_t event; 
