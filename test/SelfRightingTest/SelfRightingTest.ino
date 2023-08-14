@@ -3,7 +3,7 @@
 #include "src/Magnetometer/magnetometer.h"
 #include "src/motor/Motors.h"
 
-const int GOAL_HEADING = 0;
+const int GOAL_HEADING = ;
 
 enum FieldColour{
   OutWhite,
