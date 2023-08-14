@@ -3,7 +3,7 @@
 #include "src/Magnetometer/magnetometer.h"
 #include "src/motor/Motors.h"
 
-const int GOAL_HEADING = ;
+const int GOAL_HEADING = 95;
 
 enum FieldColour{
   OutWhite,
@@ -34,16 +34,7 @@ void loop() {
   Serial.print(COL);
   Serial.print(" HEADING: ");
   Serial.println(theta);
-  while(COL != (int)FieldColour::GoalBlack) {
-    int theta = (int)Magnetometer::GetHeading();
-    Motors::MoveMotors(-(90+theta), 255, 0);
-  }
 
-  while (theta != GOAL_HEADING) {
-      if (theta < GOAL_HEADING) {
-        Motors::MoveMotors(0, 0, 255);
-      } else {
-        Motors::MoveMotors(0, 0, -255);
-      }
-    }
+
+  Motors::MoveMotors(0, 0, (GOAL_HEADING - theta));
 }

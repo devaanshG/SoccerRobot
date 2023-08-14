@@ -1,7 +1,7 @@
-#include "src\BallSensor\BallSensor.h"
-#include "src\ColourSensor\ColourSensor.h"
-#include "src\Magnetometer\magnetometer.h"
-#include "src\motor\Motors.h"
+#include "src/BallSensor/BallSensor.h"
+#include "src/ColourSensor/ColourSensor.h"
+#include "src/Magnetometer/magnetometer.h"
+#include "src/motor/Motors.h"
 
 #include "calibrationConstants.h"
 
@@ -50,13 +50,13 @@ bool DoAttack() {
       Motors::MoveMotors(
          ballHeading, 
          255, 
-         downfieldHeading - Magnetometer::GetHeading() - goalHeading);
+         0);
 
     }else{
        Motors::MoveMotors(
          ballHeading, 
          255, 
-         downfieldHeading - Magnetometer::GetHeading() - ballHeading);
+         0);
     }
     return true;
   }else{
