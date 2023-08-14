@@ -9,6 +9,6 @@ void setup(){
   }
 }
 void loop(){
-  Serial.println(Magnetometer::GetHeading());
+  Serial.print(Magnetometer::GetHeading());
   delay(100);
 }
