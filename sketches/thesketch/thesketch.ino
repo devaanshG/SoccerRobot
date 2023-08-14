@@ -3,7 +3,7 @@
 #include "src\Magnetometer\magnetometer.h"
 #include "src\motor\Motors.h"
 
-
+#include "calibrationConstants.h"
 
 #define BALL_SENSOR_PIN 13
 
@@ -13,6 +13,8 @@ void setup() {
   Motors::init();
   ColourSensor::init();
   Magnetometer::Init();
+
+  pinMode(13, INPUT);
 }
 
 
@@ -20,6 +22,9 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
   Serial.println(HasBall());
+  if(!DoAttack()){
+    DoDefend();
+  }
   // if(HasBall()){
   //   DoAttack();
   // }else{
@@ -32,10 +37,6 @@ void loop() {
   // }
 }
 
-bool HasBall() {
-    return digitalRead(BALL_SENSOR_PIN) ? true:false;
-};
-
 bool DoAttack() {
   // Check if we are in the field
   if(InField()){
@@ -44,54 +45,78 @@ bool DoAttack() {
       return false;//defend
     }
     
-    // If GoToBall();
-      // GoToGoal
-    // If !GoToBall();
-      // return
-  // If not in field
-    // Move into field
-    // Loop back
+    if(HasBall()){
+      int goalHeading = EstimateOpponentGoalHeading();
+      Motors::MoveMotors(
+         ballHeading, 
+         255, 
+         downfieldHeading - Magnetometer::GetHeading() - goalHeading);
+
+    }else{
+       Motors::MoveMotors(
+         ballHeading, 
+         255, 
+         downfieldHeading - Magnetometer::GetHeading() - ballHeading);
+    }
+    return true;
+  }else{
+    ReturnToField();
   }
 };
 
-bool GoToBall() {
-  if(InField()){
-    
-    // If ball not found
-      // Return
-    // Else
-      // While !HasBall Follow ball
-      // Retur
-  // If not in field
-    // Move into field
-  }
-    
-};
+void DoDefend(){
+  Motors::MoveMotors(EstimateOurGoalHeading(), 255, 0);
+}
 
-bool GoToGoal() {
-  
-};
-
-int GetBallHeading();
-void Move(int heading);
-void MoveToGoal();
+int GetBallHeading(){
+  return getBallDir();
+}
 
 
 enum FieldColour{
-  OutWhite
+  OutWhite,
   GoalBlack,
   LightGreen,
   DarkGreen,
   MidfieldGreen
+};
+
+int EstimateOurGoalHeading(){
+  int estimate = 360 - downfieldHeading;
+  if(ColourSensor::get_current_colour_ID() == leftGreenID){
+    estimate -= 45;
+  }else if(ColourSensor::get_current_colour_ID() == rightGreenID){
+    estimate += 45;
+  }
+  return estimate;
+}
+
+int EstimateOpponentGoalHeading(){
+  int estimate = downfieldHeading;
+  if(ColourSensor::get_current_colour_ID() == leftGreenID){
+    estimate += 45;
+  }else if(ColourSensor::get_current_colour_ID() == rightGreenID){
+    estimate -= 45;
+  }
+  return estimate;
 }
 
 bool InMiddle(){
-  return ColourSensor::get_current_colour_ID() == (int)MidfieldGreen
+  return ColourSensor::get_current_colour_ID() == (int)MidfieldGreen;
 }
 
 bool InGoal(){
   return ColourSensor::get_current_colour_ID() == (int)GoalBlack;
 }
+
 bool InField() {
   return ColourSensor::get_current_colour_ID() != (int)OutWhite;
-};
+}
+
+void ReturnToField(){
+
+}
+
+bool HasBall(){
+  return digitalRead(13) == LOW;
+}

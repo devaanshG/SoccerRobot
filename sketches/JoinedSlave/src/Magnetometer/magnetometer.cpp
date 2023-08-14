@@ -8,6 +8,14 @@ float Magnetometer::GetHeading(){
     sensors_event_t event; 
     Magnetometer::compass->getEvent(&event);
 
+
+    Serial.print(" X:");
+    Serial.print(event.magnetic.x);
+    Serial.print(" Y:");
+    Serial.print(event.magnetic.y);
+    Serial.print(" Z:");
+    Serial.println(event.magnetic.z);
+
     //ASSUMING that i can just modify these
     event.magnetic.x -= HARD_IRON[0];//CONSIDER that i dont think -= is right, but the example code uses this
     event.magnetic.y -= HARD_IRON[1];
@@ -18,7 +26,7 @@ float Magnetometer::GetHeading(){
 bool Magnetometer::Init(){
     Magnetometer::compass = new Adafruit_LIS3MDL();
 
-    bool sucess = Magnetometer::compass->begin_I2C(0x1E);
+    bool sucess = Magnetometer::compass->begin_I2C(0x1C);
     Magnetometer::compass->setPerformanceMode(LIS3MDL_ULTRAHIGHMODE);
     Magnetometer::compass->setIntThreshold(500);
     Magnetometer::compass->configInterrupt(true, true, true,//false, false, true, // enable z axis
